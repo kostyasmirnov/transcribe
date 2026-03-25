@@ -65,10 +65,16 @@ def transcribe_with_diarization(
 
     # 2. Диаризация
     print("Загрузка модели диаризации...")
-    pipeline = Pipeline.from_pretrained(
-        "pyannote/speaker-diarization-3.1",
-        token=token,
-    )
+    try:
+        pipeline = Pipeline.from_pretrained(
+            "pyannote/speaker-diarization-3.1",
+            token=token,
+        )
+    except TypeError:
+        pipeline = Pipeline.from_pretrained(
+            "pyannote/speaker-diarization-3.1",
+            use_auth_token=token,
+        )
 
     print("Загрузка аудио для диаризации...")
     import subprocess

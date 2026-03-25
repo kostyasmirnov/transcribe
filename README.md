@@ -6,33 +6,58 @@
 
 ---
 
-## Требования
+## Установка
 
-- Python 3.9+
-- [ffmpeg](https://ffmpeg.org/) (установить через `brew install ffmpeg`)
-- Hugging Face токен — нужен только для режима `--diarize`
+### 1. Установить ffmpeg
 
-### Установка зависимостей
+```bash
+brew install ffmpeg
+```
+
+> Если `brew` не установлен: [brew.sh](https://brew.sh)
+
+### 2. Скачать скрипт
+
+```bash
+cd ~
+git clone https://github.com/kostyasmirnov/transcribe.git
+```
+
+Если папка `transcribe` уже существует:
+
+```bash
+rm -rf ~/transcribe
+git clone https://github.com/kostyasmirnov/transcribe.git
+```
+
+### 3. Создать виртуальное окружение и установить зависимости
 
 ```bash
 python3 -m venv ~/transcribe-env
-source ~/transcribe-env/bin/activate
-pip install faster-whisper pyannote.audio torchaudio
+~/transcribe-env/bin/pip install --upgrade pip
+~/transcribe-env/bin/pip install faster-whisper "pyannote.audio>=3.1" torchaudio
 ```
 
-### Hugging Face токен (для диаризации)
+> Обновление pip обязательно — старая версия может некорректно устанавливать пакеты.
+
+### 4. Hugging Face токен (для диаризации `--diarize`)
 
 1. Зарегистрируйтесь на [huggingface.co](https://huggingface.co) и получите токен в [настройках](https://huggingface.co/settings/tokens)
 2. Примите условия использования моделей:
    - [pyannote/speaker-diarization-3.1](https://huggingface.co/pyannote/speaker-diarization-3.1)
    - [pyannote/segmentation-3.0](https://huggingface.co/pyannote/segmentation-3.0)
-3. Добавьте токен в переменную окружения:
+3. Добавьте токен в `~/.zshrc`:
 
 ```bash
-export HF_TOKEN=hf_ваш_токен_здесь
+echo 'export HF_TOKEN=hf_ваш_токен_здесь' >> ~/.zshrc
+source ~/.zshrc
 ```
 
-Чтобы не вводить каждый раз, добавьте строку выше в `~/.zshrc` или `~/.bashrc`.
+Проверить что токен подхватился:
+
+```bash
+echo $HF_TOKEN
+```
 
 ---
 
@@ -44,7 +69,7 @@ export HF_TOKEN=hf_ваш_токен_здесь
 ~/transcribe-env/bin/python ~/transcribe/transcribe.py /путь/к/файлу
 ```
 
-> Если в пути есть пробелы — берите путь в кавычки.
+> Если в пути есть пробелы — обязательно берите путь в кавычки.
 
 ---
 
@@ -77,7 +102,7 @@ export HF_TOKEN=hf_ваш_токен_здесь
 
 **Файл с пробелами в имени:**
 ```bash
-~/transcribe-env/bin/python ~/transcribe/transcribe.py "/Users/pocket/Movies/2026-03-12 16-29-21.mov" --diarize -o ~/Desktop/результат.txt -l ru
+~/transcribe-env/bin/python ~/transcribe/transcribe.py "/Users/имя/Movies/2026-03-12 16-29-21.mov" --diarize -o ~/Desktop/результат.txt -l ru
 ```
 
 ---
@@ -110,3 +135,28 @@ export HF_TOKEN=hf_ваш_токен_здесь
 ## Поддерживаемые форматы
 
 `mp3`, `mp4`, `m4a`, `aac`, `wav`, `flac`, `ogg`, `webm`, `mkv`, `mov`
+
+---
+
+## Решение проблем
+
+**`TypeError: from_pretrained() got an unexpected keyword argument 'token'`**
+
+Устарела версия `pyannote.audio`. Обновить:
+```bash
+~/transcribe-env/bin/pip install --upgrade pyannote.audio
+```
+
+**`No such file or directory` для файла который существует**
+
+Проверьте — нет ли пробела в конце пути. Путь к файлу обязательно в кавычках:
+```bash
+... "/путь/к/файлу.mov" ...
+```
+
+**`HF_TOKEN` не найден при диаризации**
+
+```bash
+echo $HF_TOKEN  # проверить
+source ~/.zshrc  # перезагрузить переменные
+```
