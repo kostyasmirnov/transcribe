@@ -1,0 +1,26 @@
+# IDE
+.idea/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# macOS
+.DS_Store
+
+# Медиафайлы (тестовые и временные)
+*.mp4
+*.mp3
+*.m4a
+*.aac
+*.wav
+*.flac
+*.ogg
+*.webm
+*.mkv
+*.mov
+
+# Результаты транскрипции
+*.txt
