@@ -8,6 +8,8 @@
 
 ## Установка
 
+> **Требования:** Python 3.10+. Проверить: `python3 --version`. Если ниже — установить: `brew install python@3.10` и использовать `python3.10` вместо `python3` в командах ниже.
+
 ### 1. Установить ffmpeg
 
 ```bash
@@ -143,9 +145,20 @@ echo $HF_TOKEN
 **`TypeError: from_pretrained() got an unexpected keyword argument 'token'`**
 **`TypeError: hf_hub_download() got an unexpected keyword argument 'use_auth_token'`**
 
-Устарела версия `pyannote.audio`. Обновить:
+Несовместимость версий `pyannote.audio` и `huggingface_hub`. Причина почти всегда — Python 3.9, на котором `pyannote.audio` 4.x не ставится.
+
+**Вариант 1 — обновить Python до 3.10+ (рекомендуется):**
 ```bash
-~/transcribe-env/bin/pip install --upgrade pyannote.audio
+brew install python@3.10
+rm -rf ~/transcribe-env
+python3.10 -m venv ~/transcribe-env
+~/transcribe-env/bin/pip install --upgrade pip
+~/transcribe-env/bin/pip install faster-whisper pyannote.audio torchaudio
+```
+
+**Вариант 2 — понизить `huggingface_hub` (быстрый фикс):**
+```bash
+~/transcribe-env/bin/pip install "huggingface_hub<0.24"
 ```
 
 **`No such file or directory` для файла который существует**
