@@ -7,7 +7,10 @@
 import argparse
 import os
 import sys
+import warnings
 from pathlib import Path
+
+warnings.filterwarnings("ignore", category=RuntimeWarning, module="faster_whisper")
 
 from faster_whisper import WhisperModel
 
