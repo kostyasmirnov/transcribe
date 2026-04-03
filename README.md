@@ -35,7 +35,7 @@ git clone https://github.com/kostyasmirnov/transcribe.git
 ```bash
 python3 -m venv ~/transcribe-env
 ~/transcribe-env/bin/pip install --upgrade pip
-~/transcribe-env/bin/pip install faster-whisper "pyannote.audio>=3.1" torchaudio
+~/transcribe-env/bin/pip install faster-whisper pyannote.audio torchaudio
 ```
 
 > Обновление pip обязательно — старая версия может некорректно устанавливать пакеты.
@@ -141,6 +141,7 @@ echo $HF_TOKEN
 ## Решение проблем
 
 **`TypeError: from_pretrained() got an unexpected keyword argument 'token'`**
+**`TypeError: hf_hub_download() got an unexpected keyword argument 'use_auth_token'`**
 
 Устарела версия `pyannote.audio`. Обновить:
 ```bash
